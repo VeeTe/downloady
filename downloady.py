@@ -3,7 +3,7 @@ import random, string, datetime, argparse
 INTDEFAULTLENGTHOFFILENAME = 6
 
 def readFile(strFilepath: str) -> str:
-	if issubclass(type(strFilepath),str): return None
+	if issubclass(type(strFilepath),str) != True : return None
 	strReturn = ""
 	with open(strFilepath, "r") as objOpenFile:
 		strReturn = objOpenFile.read()

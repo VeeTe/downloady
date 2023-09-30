@@ -64,7 +64,12 @@ def makeFilename(strSource: str, intLength: int=INTDEFAULTLENGTHOFFILENAME) -> s
 		while len(strFilename) != intLength:
 			intRandom = random.randint(0,len(strFilename)-1)
 			strFilename = strFilename[:intRandom] + strFilename[intRandom+1:]
-	return strFilename + strExtension
+	strReturn = (strFilename + strExtension)
+	arrBadChars = ['-', " ", "'", "(", ")"]
+	for strChar in arrBadChars:
+		if strChar in strReturn:
+			strReturn = strReturn.replace(strChar, randomString(1))
+	return strReturn.lower()
 
 def fixDownloadLink(strSource: str, strFilename: str="") -> str:
 	if strSource == strFilename or strFilename == "": return strSource 
@@ -72,6 +77,8 @@ def fixDownloadLink(strSource: str, strFilename: str="") -> str:
 	if strSource[:7] != "http://" and strSource[:8] != "https://" and strSource[:6] != "ftp://": strReturn = "http://"+ strSource
 	if strSource[-1] != "/": strReturn += "/"
 	strReturn += strFilename
+	
+
 	return strReturn
 
 def strNow():

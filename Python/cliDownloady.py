@@ -44,9 +44,9 @@ def pickDestinationFolder(strFolder: str="all", strFilename: str="") -> list:
     strFolder = strFolder.lower()
     arrReturn = []
     if strFolder in ['cmddocuments', 'documents', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Documents\\{strFilename}')
-    if strFolder in ['psdocuments', 'documents', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Documents\\{strFilename}"')
-    if strFolder in ['cmddownloads', 'downloads', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Downloads\\"')
-    if strFolder in ['psdownloads', 'downloads', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Downloads\\{strFilename}"')
+    if strFolder in ['psdocuments', 'documents', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Documents\\{strFilename}')
+    if strFolder in ['cmddownloads', 'downloads', 'cmd', 'all']: arrReturn.append(f'C:\\Users\\%USERNAME%\\Downloads\\')
+    if strFolder in ['psdownloads', 'downloads', 'ps', 'all']: arrReturn.append(f'C:\\Users\\$env:USERNAME\\Downloads\\{strFilename}')
     if strFolder in ['public', 'all']: arrReturn.append(f'C:\\Users\\Public\\{strFilename}')
     if strFolder in ['temp', 'all']: arrReturn.append(f'C:\\Temp\\{strFilename}')
     if strFolder in ['programdata', 'all']: arrReturn.append(f'C:\\ProgramData\\{strFilename}')
